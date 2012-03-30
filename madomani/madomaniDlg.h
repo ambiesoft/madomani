@@ -20,7 +20,6 @@ public:
 // ダイアログ データ
 	//{{AFX_DATA(CMadomaniDlg)
 	enum { IDD = IDD_MADOMANI_DIALOG };
-		// メモ: この位置に ClassWizard によってデータ メンバが追加されます。
 	//}}AFX_DATA
 
 	// ClassWizard は仮想関数のオーバーライドを生成します。
