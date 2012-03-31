@@ -11,8 +11,8 @@ public:
 		path_=path;
 		order_=o;
 	}
-	tstring GetPath() const {
-		return path_;
+	LPCTSTR GetPath() const {
+		return path_.c_str();
 	}
 	HWND GetHwnd() const {
 		return h_;
