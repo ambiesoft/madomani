@@ -17,7 +17,7 @@
 #include <string>
 using namespace std;
 
-#define countof(a) (sizeof(a)/sizeof(a[0])
+#define countof(a) (sizeof(a)/sizeof(a[0]))
 
 
 
@@ -70,7 +70,14 @@ inline void DTRACE(LPCTSTR s) { OutputDebugString(s); }
 #define DASSERT_IS_DERIVED(instance, clazz) ((void)0)
 #endif
 
+#ifdef _UNICODE
+#define targv __wargv
+#else
+#define targv __argv
+#endif
 
+#define I18S(t) (t) 
+#define APP_NAME _T("madomani")
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++
 

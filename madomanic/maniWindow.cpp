@@ -79,7 +79,7 @@ BOOL maniWindow(HWND hwnd, MOVEWINDOW_POS postype, MOVEWINDOW_SIZE sizetype)
 		break;
 	case MOVEWINDOW_POS_TOPRIGHT:
 		targetPos.x = rcWork.right - (rcWin.right-rcWin.left); // screenRect.Right - curSize.Width;
-		targetPos.y = rcWork.bottom; // screenRect.Location.Y;
+		targetPos.y = rcWork.top; // screenRect.Location.Y;
 		break;
 	case MOVEWINDOW_POS_BOTTOMLEFT:
 		targetPos.x = rcWork.left;// screenRect.Location.X;
@@ -89,6 +89,7 @@ BOOL maniWindow(HWND hwnd, MOVEWINDOW_POS postype, MOVEWINDOW_SIZE sizetype)
 		targetPos.x = rcWork.right - (rcWin.right - rcWin.left);// screenRect.Right - curSize.Width;
 		targetPos.y = rcWork.bottom - (rcWin.bottom - rcWin.top); // screenRect.Bottom - curSize.Height;
 		break;
+	case MOVEWINDOW_POS_CENTER:
 
 	default:
 		DASSERT(false);
