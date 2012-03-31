@@ -1,26 +1,26 @@
 # Microsoft Developer Studio Project File - Name="madomanic" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
-# ** DO NOT EDIT **
+# ** 編集しないでください **
 
 # TARGTYPE "Win32 (x86) Application" 0x0101
 
 CFG=madomanic - Win32 UnicodeDebug
-!MESSAGE This is not a valid makefile. To build this project using NMAKE,
-!MESSAGE use the Export Makefile command and run
+!MESSAGE これは有効なﾒｲｸﾌｧｲﾙではありません。 このﾌﾟﾛｼﾞｪｸﾄをﾋﾞﾙﾄﾞするためには NMAKE を使用してください。
+!MESSAGE [ﾒｲｸﾌｧｲﾙのｴｸｽﾎﾟｰﾄ] ｺﾏﾝﾄﾞを使用して実行してください
 !MESSAGE 
 !MESSAGE NMAKE /f "madomanic.mak".
 !MESSAGE 
-!MESSAGE You can specify a configuration when running NMAKE
-!MESSAGE by defining the macro CFG on the command line. For example:
+!MESSAGE NMAKE の実行時に構成を指定できます
+!MESSAGE ｺﾏﾝﾄﾞ ﾗｲﾝ上でﾏｸﾛの設定を定義します。例:
 !MESSAGE 
 !MESSAGE NMAKE /f "madomanic.mak" CFG="madomanic - Win32 UnicodeDebug"
 !MESSAGE 
-!MESSAGE Possible choices for configuration are:
+!MESSAGE 選択可能なﾋﾞﾙﾄﾞ ﾓｰﾄﾞ:
 !MESSAGE 
-!MESSAGE "madomanic - Win32 Release" (based on "Win32 (x86) Application")
-!MESSAGE "madomanic - Win32 Debug" (based on "Win32 (x86) Application")
-!MESSAGE "madomanic - Win32 UnicodeDebug" (based on "Win32 (x86) Application")
-!MESSAGE "madomanic - Win32 UnicodeRelease" (based on "Win32 (x86) Application")
+!MESSAGE "madomanic - Win32 Release" ("Win32 (x86) Application" 用)
+!MESSAGE "madomanic - Win32 Debug" ("Win32 (x86) Application" 用)
+!MESSAGE "madomanic - Win32 UnicodeDebug" ("Win32 (x86) Application" 用)
+!MESSAGE "madomanic - Win32 UnicodeRelease" ("Win32 (x86) Application" 用)
 !MESSAGE 
 
 # Begin Project
@@ -161,6 +161,11 @@ SOURCE=..\..\MyUtility\GetFileNameFromHwnd.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\MyUtility\getWindowTstring.cpp
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\MyUtility\GetWorkingArea.cpp
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
@@ -191,6 +196,10 @@ SOURCE=..\..\MyUtility\vbregexp.cpp
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=..\..\MyUtility\getWindowTstring.h
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\MyUtility\GetWorkingArea.h

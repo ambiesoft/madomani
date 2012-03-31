@@ -6,6 +6,7 @@
 #include "../../MyUtility/GetWorkingArea.h"
 #include "../../MyUtility/stringEndwith.h"
 #include "../../MyUtility/vbregexp.h"
+#include "../../MyUtility/getWindowTstring.h"
 
 #include "madomanic.h"
 
@@ -44,6 +45,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	// -pos bottomleft -size maxwidth AcroRd32.exe
 	// -pos bottomleft firefox.exe -rtitle " - Mozilla Firefox$"
 	// -pos topright larmoji.exe
+	// -pos bottomright iexplore.exe -rtitle " - Windows Internet Explorer$"
+	// -pos topleft mdie.exe -rtitle "^MDIE"
 	for(int i=1 ; i < __argc ; ++i)
 	{
 		LPCTSTR arg = targv[i];
@@ -59,13 +62,21 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 			}
 			++i;
 			arg = targv[i];
-			if(lstrcmp(arg, _T("bottomleft"))==0)
+			if(lstrcmp(arg, _T("topleft"))==0)
+			{
+				postype = MOVEWINDOW_POS_TOPLEFT;
+			}
+			else if(lstrcmp(arg, _T("bottomleft"))==0)
 			{
 				postype = MOVEWINDOW_POS_BOTTOMLEFT;
 			}
 			else if(lstrcmp(arg, _T("topright"))==0)
 			{
 				postype = MOVEWINDOW_POS_TOPRIGHT;
+			}
+			else if(lstrcmp(arg, _T("bottomright"))==0)
+			{
+				postype = MOVEWINDOW_POS_BOTTOMRIGHT;
 			}
 			else
 			{
@@ -133,10 +144,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		{
 			if(regtitle)
 			{
-				TCHAR t[1024];
-				t[0]=0;
-				GetWindowText((*it)->GetHwnd(), t, countof(t));
-				if(!vbregMatch(t, regtitle))
+				tstring title = getWindowTstring((*it)->GetHwnd());
+				if(!vbregMatch(title.c_str(), regtitle))
 					continue;
 			}
 			maniWindow(
