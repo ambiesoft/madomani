@@ -33,16 +33,59 @@ void errorMeesageAndQuit(LPCTSTR pMessage, int returnvalue = -1)
 	exit(returnvalue);
 }
 
+void argprocessWidthHeight(const bool iswidth, int& i, const int argc, LPTSTR*& argv, DWORD *pST, LPCTSTR pError)
+{
+	tstring message;
+	if(*pST)
+	{
+		message = pError;
+		message += I18S(_T(" : size already set"));
+		errorMeesageAndQuit(message.c_str());
+	}
+	if( (i+1)== argc )
+	{
+		message = I18S(_T("No argument for "));
+		message += pError; 
+		errorMeesageAndQuit(message.c_str());
+	}
+	++i;
+	LPCTSTR arg = argv[i];
+	if(lstrcmp(arg, _T("max"))==0)
+	{
+		if(iswidth)
+			*pST = MOVEWINDOW_SIZE_MAXWIDTH;
+		else
+			*pST = MOVEWINDOW_SIZE_MAXHEIGHT;
+	}
+	else if(lstrcmp(arg, _T("half"))==0)
+	{
+		if(iswidth)
+			*pST = MOVEWINDOW_SIZE_HALFWIDTH;
+		else
+			*pST = MOVEWINDOW_SIZE_HALFHEIGHT;
+	}
+	else
+	{
+		tstring t= arg;
+		t+= _T(" : ");
+		t+= I18S(_T("Invalid argument for "));
+		t+= pError;
+		errorMeesageAndQuit(t.c_str());
+	}
+}
+
 int APIENTRY _tWinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
                      LPTSTR     lpCmdLine,
                      int       nCmdShow )
 {
 	MOVEWINDOW_POS postype = MOVEWINDOW_POS_NONE;
-	MOVEWINDOW_SIZE sizetype = 0;
+	DWORD sizetypeWidth = 0;
+	DWORD sizetypeHeight = 0;
 	LPCTSTR mainarg = NULL;
 	LPCTSTR regtitle = NULL;
-	// -pos bottomleft -size maxwidth AcroRd32.exe
+	// -pos bottomleft -width max AcroRd32.exe
+	// -pos bottomright -width half -height max AcroRd32.exe
 	// -pos bottomleft firefox.exe -rtitle " - Mozilla Firefox$"
 	// -pos topright larmoji.exe
 	// -pos bottomright iexplore.exe -rtitle " - Windows Internet Explorer$"
@@ -86,30 +129,13 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 				errorMeesageAndQuit(t.c_str());
 			}
 		}
-		else if(lstrcmp(arg, _T("-size"))==0)
+		else if(lstrcmp(arg, _T("-width"))==0)
 		{
-			if(sizetype)
-			{
-				errorMeesageAndQuit(I18S(_T("-size : size already set")));
-			}
-			if( (i+1)==__argc )
-			{
-				errorMeesageAndQuit(I18S(_T("No argument for -size")));
-			}
-			++i;
-			arg = targv[i];
-			if(lstrcmp(arg, _T("maxwidth"))==0)
-			{
-				sizetype = MOVEWINDOW_SIZE_MAXWIDTH;
-							// MOVEWINDOW_SIZE_HALFHEIGHT;
-			}
-			else
-			{
-				tstring t= arg;
-				t+= _T(" : ");
-				t+= I18S(_T("Invalid argument for -size"));
-				errorMeesageAndQuit(t.c_str());
-			}
+			argprocessWidthHeight(true, i, __argc, targv, &sizetypeWidth, arg);
+		}
+		else if(lstrcmp(arg, _T("-height"))==0)
+		{
+			argprocessWidthHeight(false, i, __argc, targv, &sizetypeHeight, arg);
 		}
 		else if(lstrcmp(arg, _T("-rtitle"))==0)
 		{
@@ -151,7 +177,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 			maniWindow(
 				(*it)->GetHwnd(), 
 				postype, // MOVEWINDOW_POS_BOTTOMLEFT, 
-				sizetype);
+				sizetypeWidth | sizetypeHeight);
 			return 0;
 		}
 	}
