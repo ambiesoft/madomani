@@ -109,6 +109,10 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 			{
 				postype = MOVEWINDOW_POS_TOPLEFT;
 			}
+			else if(lstrcmp(arg, _T("centerleft"))==0)
+			{
+				postype = MOVEWINDOW_POS_CENTERLEFT;
+			}
 			else if(lstrcmp(arg, _T("bottomleft"))==0)
 			{
 				postype = MOVEWINDOW_POS_BOTTOMLEFT;
@@ -116,6 +120,10 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 			else if(lstrcmp(arg, _T("topright"))==0)
 			{
 				postype = MOVEWINDOW_POS_TOPRIGHT;
+			}
+			else if(lstrcmp(arg, _T("centerright"))==0)
+			{
+				postype = MOVEWINDOW_POS_CENTERRIGHT;
 			}
 			else if(lstrcmp(arg, _T("bottomright"))==0)
 			{
