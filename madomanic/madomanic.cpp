@@ -84,6 +84,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	DWORD sizetypeHeight = 0;
 	LPCTSTR mainarg = NULL;
 	LPCTSTR regtitle = NULL;
+	// -pos bottomleft -size maxwidth AcroRd32.exe // err
 	// -pos bottomleft -width max AcroRd32.exe
 	// -pos bottomright -width half -height max AcroRd32.exe
 	// -pos bottomleft firefox.exe -rtitle " - Mozilla Firefox$"
