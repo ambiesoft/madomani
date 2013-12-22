@@ -74,27 +74,39 @@ BOOL maniWindow(HWND hwnd, MOVEWINDOW_POS postype, MOVEWINDOW_SIZE sizetype)
 	case MOVEWINDOW_POS_NONE:
 		break;
 	case MOVEWINDOW_POS_TOPLEFT:
-		targetPos.x = rcWork.left;// screenRect.Location;
+		targetPos.x = rcWork.left;
+		targetPos.y = rcWork.top;
+		break;
+	case MOVEWINDOW_POS_TOPCENTER:
+		targetPos.x = (rcWork.right - (rcWin.right-rcWin.left))/2;
 		targetPos.y = rcWork.top;
 		break;
 	case MOVEWINDOW_POS_TOPRIGHT:
-		targetPos.x = rcWork.right - (rcWin.right-rcWin.left); // screenRect.Right - curSize.Width;
-		targetPos.y = rcWork.top; // screenRect.Location.Y;
+		targetPos.x = rcWork.right - (rcWin.right-rcWin.left);
+		targetPos.y = rcWork.top;
 		break;
+	case MOVEWINDOW_POS_CENTERRIGHT:
+		targetPos.x = rcWork.right - (rcWin.right - rcWin.left);
+		targetPos.y = (rcWork.bottom - (rcWin.bottom - rcWin.top))/2;
+		break;
+	case MOVEWINDOW_POS_BOTTOMRIGHT:
+		targetPos.x = rcWork.right - (rcWin.right - rcWin.left);
+		targetPos.y = rcWork.bottom - (rcWin.bottom - rcWin.top);
+		break;
+	case MOVEWINDOW_POS_BOTTOMCENTER:
+		targetPos.x =  (rcWork.right - (rcWin.right-rcWin.left))/2;
+		targetPos.y = rcWork.bottom - (rcWin.bottom - rcWin.top);
+		break;
+
+
+
+	
 	case MOVEWINDOW_POS_BOTTOMLEFT:
 		targetPos.x = rcWork.left;// screenRect.Location.X;
 		targetPos.y = rcWork.bottom - (rcWin.bottom - rcWin.top); // screenRect.Bottom - curSize.Height;
 		break;
-	case MOVEWINDOW_POS_BOTTOMRIGHT:
-		targetPos.x = rcWork.right - (rcWin.right - rcWin.left);// screenRect.Right - curSize.Width;
-		targetPos.y = rcWork.bottom - (rcWin.bottom - rcWin.top); // screenRect.Bottom - curSize.Height;
-		break;
 	case MOVEWINDOW_POS_CENTERLEFT:
 		targetPos.x = rcWork.left;// screenRect.Location.X;
-		targetPos.y = (rcWork.bottom - (rcWin.bottom - rcWin.top))/2; // screenRect.Bottom - curSize.Height;
-		break;
-	case MOVEWINDOW_POS_CENTERRIGHT:
-		targetPos.x = rcWork.right - (rcWin.right - rcWin.left);// screenRect.Right - curSize.Width;
 		targetPos.y = (rcWork.bottom - (rcWin.bottom - rcWin.top))/2; // screenRect.Bottom - curSize.Height;
 		break;
 
