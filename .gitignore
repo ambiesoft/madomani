@@ -1,6 +1,7 @@
 *.sdf
 *.suo
 *.user
+.vs/
 
 UnicodeDebug/
 UnicodeRelease/
