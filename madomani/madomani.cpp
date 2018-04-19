@@ -40,7 +40,7 @@ BOOL CMadomaniApp::InitInstance()
 	// 標準的な初期化処理
 
 #ifdef _AFXDLL
-	Enable3dControls();			// 共有 DLL 内で MFC を使う場合はここをコールしてください。
+	// Enable3dControls();			// 共有 DLL 内で MFC を使う場合はここをコールしてください。
 #else
 	Enable3dControlsStatic();	// MFC と静的にリンクする場合はここをコールしてください。
 #endif

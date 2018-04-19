@@ -1,11 +1,11 @@
 #include "stdafx.h"
 
-#include "../../MyUtility/tstring.h"
-#include "../../MyUtility/GetWorkingArea.h"
+#include "../../lsMisc/tstring.h"
+#include "../../lsMisc/GetWorkingArea.h"
 
 #include "madomanic.h"
 
-BOOL maniWindow(HWND hwnd, MOVEWINDOW_POS postype, MOVEWINDOW_SIZE sizetype)
+BOOL maniWindow(HWND hwnd, MOVEWINDOW_POS postype, MOVEWINDOW_SIZE sizetype, int cw, int ch)
 {
 	RECT rcWork;
 	if(!GetWorkingArea(hwnd, &rcWork))
@@ -16,6 +16,9 @@ BOOL maniWindow(HWND hwnd, MOVEWINDOW_POS postype, MOVEWINDOW_SIZE sizetype)
 		return FALSE;
 
 	POINT targetPos;
+	targetPos.x = rcWin.left;
+	targetPos.y = rcWin.top;
+
 	int targetWidth = rcWin.right - rcWin.left;
 	int targetHeight = rcWin.bottom - rcWin.top;
 
@@ -60,6 +63,15 @@ BOOL maniWindow(HWND hwnd, MOVEWINDOW_POS postype, MOVEWINDOW_SIZE sizetype)
 		DASSERT(!(sizetype & MOVEWINDOW_SIZE_MAXHEIGHT));
 		DASSERT(!(sizetype & MOVEWINDOW_SIZE_HALFHEIGHT));
 		targetHeight = (rcWork.bottom - rcWork.top)/3;
+	}
+
+	if (sizetype & MOVEWINDOW_SIZE_CUSTOMWIDTH)
+	{
+		targetHeight = cw;
+	}
+	if (sizetype & MOVEWINDOW_SIZE_CUSTOMHEIGHT)
+	{
+		targetHeight = ch;
 	}
 
 	rcWin.right = rcWin.left + targetWidth;

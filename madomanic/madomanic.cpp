@@ -1,16 +1,16 @@
 #include "stdafx.h"
 
 
-#include "../../MyUtility/GetFileNameFromHwnd.h"
-#include "../../MyUtility/tstring.h"
-#include "../../MyUtility/GetWorkingArea.h"
-#include "../../MyUtility/stringEndwith.h"
-#include "../../MyUtility/vbregexp.h"
-#include "../../MyUtility/getWindowTstring.h"
+#include "../../lsMisc/GetFileNameFromHwnd.h"
+#include "../../lsMisc/tstring.h"
+#include "../../lsMisc/GetWorkingArea.h"
+#include "../../lsMisc/stringEndwith.h"
+#include "../../lsMisc/vbregexp.h"
+#include "../../lsMisc/getWindowTstring.h"
 
 #include "madomanic.h"
 #include "inargs.h"
-
+#include "helper.h"
 
 
 
@@ -29,20 +29,16 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
 	return TRUE;
 }
 
-void errorMeesageAndQuit(LPCTSTR pMessage, int returnvalue = -1)
-{
-	MessageBox(NULL, pMessage, APP_NAME, MB_ICONERROR);
-	exit(returnvalue);
-}
+
 
 
 void showhelp()
 {
 	MessageBox(NULL,
 		_T("Usage:\n")
-		_T("madomanic [-e executable|-E executablefull|-title <title>|-rtitle regextitle] ")
+		_T("madomanic [-e <executable> | -E <executablefull> | -title <title> | -rtitle <regextitle>] ")
 		_T("[-width <w>|-height <h>] ")
-		_T("-pos <topleft|topcenter|topright|centerright|bottomright|bottomcenter|bottomleft|centerleft|center>"),
+		_T("-pos <topleft | topcenter | topright | centerright | bottomright | bottomcenter | bottomleft | centerleft | center>"),
 		_T("madomanic"),
 		MB_ICONINFORMATION
 		);
@@ -53,15 +49,15 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
                      int       nCmdShow )
 {
 
-	// -pos bottomleft -size maxwidth AcroRd32.exe // err
+	// -pos bottomleft -size maxwidth -e AcroRd32.exe
 	// -pos bottomleft -width max AcroRd32.exe
 	// -pos bottomright -width half -height max AcroRd32.exe
 	// -pos bottomleft firefox.exe -rtitle " - Mozilla Firefox$"
-	// -pos topright larmoji.exe
+	// -pos topright -e larmoji.exe
 	// -pos bottomright iexplore.exe -rtitle " - Windows Internet Explorer$"
 	// -pos topleft mdie.exe -rtitle "^MDIE"
 
-	if(__argc==2 && lstrcmp(__targv[1],_T("-h"))==0)
+	if(__argc <= 1)
 	{
 		showhelp();
 		return 0;
@@ -137,25 +133,51 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		}
 		else if(lstrcmp(arg, _T("-rtitle"))==0)
 		{
+			if (inargs.HasRegTitle())
+			{
+				LPTSTR pMessage = (LPTSTR)malloc((lstrlen(inargs.GetMainArg().c_str()) + 128)*sizeof(TCHAR));
+				wsprintf(pMessage, I18S(_T("rtitle \"%s\" already set.")), inargs.GetRegTitle().c_str());
+				errorMeesageAndQuit(pMessage);
+			}
 			if( (i+1)==__argc )
 			{
 				errorMeesageAndQuit(I18S(_T("No argument for -rtitle")));
 			}
 			++i;
 			arg = targv[i];
-			regtitle = arg;
+			inargs.SetRegTitle(arg);
 		}
 		else if(lstrcmp(arg, _T("-e"))==0)
 		{
-			if(mainarg)
+			if(inargs.HasMainArg())
 			{
-				LPTSTR pMessage = (LPTSTR)malloc( (lstrlen(mainarg) + 128)*sizeof(TCHAR));
-				wsprintf(pMessage, I18S(_T("Main arg \"%s\" already set.")), mainarg);
+				LPTSTR pMessage = (LPTSTR)malloc( (lstrlen(inargs.GetMainArg().c_str()) + 128)*sizeof(TCHAR));
+				wsprintf(pMessage, I18S(_T("Main arg \"%s\" already set.")), inargs.GetMainArg().c_str());
 				errorMeesageAndQuit(pMessage);
 			}
+			if ((i + 1) == __argc)
+			{
+				errorMeesageAndQuit(I18S(_T("No argument for -e")));
+			}
 			++i;
-			mainarg = targv[i];
+			inargs.SetMainArg(targv[i]);
 		}
+		else if (lstrcmp(arg, _T("-h")) == 0 || lstrcmp(arg, _T("/?")) == 0)
+		{
+			showhelp();
+			return 0;
+		}
+		else
+		{
+			tstring message = I18S(_T("Unknown option:"));
+			message += arg;
+			errorMeesageAndQuit(message.c_str());
+		}
+	}
+
+	if (!inargs.HasPostype() && ( 0 == (inargs.GetSizeTypeWidth() | inargs.GetSizeTypeHeight())))
+	{
+		errorMeesageAndQuit(I18S(_T("No position specified.")));
 	}
 	TOPWINVECTOR allwins;
 	EnumWindows(EnumWindowsProc, (LPARAM)&allwins);
@@ -164,19 +186,20 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	{
 		if(stringEndwithI( 
 			(*it)->GetPath(),
-			mainarg)
+			inargs.GetMainArg().c_str())
 			)
 		{
-			if(regtitle)
+			if(inargs.HasRegTitle())
 			{
 				tstring title = getWindowTstring((*it)->GetHwnd());
-				if(!vbregMatch(title.c_str(), regtitle))
+				if(!vbregMatch(title.c_str(), inargs.GetRegTitle().c_str()))
 					continue;
 			}
 			maniWindow(
 				(*it)->GetHwnd(), 
-				postype, // MOVEWINDOW_POS_BOTTOMLEFT, 
-				sizetypeWidth | sizetypeHeight);
+				inargs.GetPostType(), // postype, // MOVEWINDOW_POS_BOTTOMLEFT, 
+				inargs.GetSizeTypeWidth() | inargs.GetSizeTypeHeight(),
+				inargs.GetCustomWidth(), inargs.GetCustomHeight()); // sizetypeWidth | sizetypeHeight);
 			return 0;
 		}
 	}

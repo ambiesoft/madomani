@@ -78,6 +78,9 @@ inline void DTRACE(LPCTSTR s) { OutputDebugString(s); }
 
 #define I18S(t) (t) 
 #define APP_NAME _T("madomani")
+
+#include "../../lsMisc/tstring.h"
+
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++
 
