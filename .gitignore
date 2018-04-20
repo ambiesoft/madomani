@@ -2,7 +2,7 @@
 *.suo
 *.user
 .vs/
-
+ipch/
 UnicodeDebug/
 UnicodeRelease/
 

@@ -49,8 +49,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
                      int       nCmdShow )
 {
 
-	// -pos bottomleft -size maxwidth -e AcroRd32.exe
-	// -pos bottomleft -width max AcroRd32.exe
+	// -pos bottomleft -width max -e AcroRd32.exe
 	// -pos bottomright -width half -height max AcroRd32.exe
 	// -pos bottomleft firefox.exe -rtitle " - Mozilla Firefox$"
 	// -pos topright -e larmoji.exe
@@ -81,39 +80,39 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 			arg = targv[i];
 			if(lstrcmp(arg, _T("topleft"))==0)
 			{
-				inargs.SetPostype(MOVEWINDOW_POS_TOPLEFT);
+				inargs.SetPostype(MV_POS_TOPLEFT);
 			}
 			else if(lstrcmp(arg, _T("topcenter"))==0)
 			{
-				inargs.SetPostype(MOVEWINDOW_POS_TOPCENTER);
+				inargs.SetPostype(MV_POS_TOPCENTER);
 			}
 			else if(lstrcmp(arg, _T("topright"))==0)
 			{
-				inargs.SetPostype(MOVEWINDOW_POS_TOPRIGHT);
+				inargs.SetPostype(MV_POS_TOPRIGHT);
 			}
 			else if(lstrcmp(arg, _T("centerright"))==0)
 			{
-				inargs.SetPostype(MOVEWINDOW_POS_CENTERRIGHT);
+				inargs.SetPostype(MV_POS_CENTERRIGHT);
 			}
 			else if(lstrcmp(arg, _T("bottomright"))==0)
 			{
-				inargs.SetPostype(MOVEWINDOW_POS_BOTTOMRIGHT);
+				inargs.SetPostype(MV_POS_BOTTOMRIGHT);
 			}
 			else if(lstrcmp(arg, _T("bottomcenter"))==0)
 			{
-				inargs.SetPostype(MOVEWINDOW_POS_BOTTOMCENTER);
+				inargs.SetPostype(MV_POS_BOTTOMCENTER);
 			}
 			else if(lstrcmp(arg, _T("bottomleft"))==0)
 			{
-				inargs.SetPostype(MOVEWINDOW_POS_BOTTOMLEFT);
+				inargs.SetPostype(MV_POS_BOTTOMLEFT);
 			}
 			else if(lstrcmp(arg, _T("centerleft"))==0)
 			{
-				inargs.SetPostype(MOVEWINDOW_POS_CENTERLEFT);
+				inargs.SetPostype(MV_POS_CENTERLEFT);
 			}
 			else if(lstrcmp(arg, _T("center"))==0)
 			{
-				inargs.SetPostype(MOVEWINDOW_POS_CENTER);
+				inargs.SetPostype(MV_POS_CENTER);
 			}
 			else
 			{
@@ -197,7 +196,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 			}
 			maniWindow(
 				(*it)->GetHwnd(), 
-				inargs.GetPostType(), // postype, // MOVEWINDOW_POS_BOTTOMLEFT, 
+				inargs.GetPostType(), // postype, // MV_POS_BOTTOMLEFT, 
 				inargs.GetSizeTypeWidth() | inargs.GetSizeTypeHeight(),
 				inargs.GetCustomWidth(), inargs.GetCustomHeight()); // sizetypeWidth | sizetypeHeight);
 			return 0;

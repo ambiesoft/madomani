@@ -2,7 +2,7 @@
 
 class CINArgs
 {
-	MOVEWINDOW_POS* postype_;
+	MV_POS* postype_;
 	DWORD* sizetypeWidth_;
 	int sizeWidthCustom_;
 	DWORD* sizetypeHeight_;
@@ -52,14 +52,14 @@ public:
 	bool HasPostype() const {
 		return postype_ != NULL;
 	}
-	MOVEWINDOW_POS GetPostType() const {
+	MV_POS GetPostType() const {
 		if (!postype_)
-			return MOVEWINDOW_POS::MOVEWINDOW_POS_NONE;
+			return MV_POS::MV_POS_NONE;
 		return *postype_;
 	}
-	void SetPostype(MOVEWINDOW_POS pos) {
+	void SetPostype(MV_POS pos) {
 		DASSERT(!postype_);
-		postype_ = new MOVEWINDOW_POS;
+		postype_ = new MV_POS;
 		*postype_ = pos;
 	}
 	

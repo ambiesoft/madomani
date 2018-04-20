@@ -42,11 +42,19 @@ void CINArgs::argprocessWH(bool bWidth, int& i, const int argc, LPTSTR*& argv, L
 	LPCTSTR arg = argv[i];
 	if(lstrcmp(arg, _T("max"))==0)
 	{
-		*target = bWidth ? MOVEWINDOW_SIZE_MAXWIDTH : MOVEWINDOW_SIZE_MAXHEIGHT;
+		*target = bWidth ? MV_SIZE_MAXWIDTH : MV_SIZE_MAXHEIGHT;
 	}
-	else if(lstrcmp(arg, _T("half"))==0)
+	else if (lstrcmp(arg, _T("half")) == 0)
 	{
-		*target = bWidth ? MOVEWINDOW_SIZE_HALFWIDTH : MOVEWINDOW_SIZE_HALFHEIGHT;
+		*target = bWidth ? MV_SIZE_HALFWIDTH : MV_SIZE_HALFHEIGHT;
+	}
+	else if (lstrcmp(arg, _T("3rd")) == 0)
+	{
+		*target = bWidth ? MV_SIZE_THIRD_WIDTH : MV_SIZE_THIRD_HEIGHT;
+	}
+	else if (lstrcmp(arg, _T("4th")) == 0)
+	{
+		*target = bWidth ? MV_SIZE_FOURTH_WIDTH : MV_SIZE_FOURTH_HEIGHT;
 	}
 	else
 	{
@@ -56,7 +64,7 @@ void CINArgs::argprocessWH(bool bWidth, int& i, const int argc, LPTSTR*& argv, L
 			if (custom < 0)
 				errorMeesageAndQuit(I18S(_T("Size can not be minus value.")));
 
-			*target = bWidth ? MOVEWINDOW_SIZE_CUSTOMWIDTH : MOVEWINDOW_SIZE_CUSTOMHEIGHT;
+			*target = bWidth ? MV_SIZE_CUSTOMWIDTH : MV_SIZE_CUSTOMHEIGHT;
 			customtarget = custom;
 		}
 		else
