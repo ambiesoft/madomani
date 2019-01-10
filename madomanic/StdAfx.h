@@ -78,6 +78,7 @@ inline void DTRACE(LPCTSTR s) { OutputDebugString(s); }
 
 #define I18S(t) (t) 
 #define APP_NAME _T("madomani")
+#define APP_VERSION _T("1.0.1")
 
 #include "../../lsMisc/tstring.h"
 

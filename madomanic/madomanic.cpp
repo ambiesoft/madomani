@@ -36,10 +36,13 @@ void showhelp()
 {
 	MessageBox(NULL,
 		_T("Usage:\n")
-		_T("madomanic [-e <executable> | -E <executablefull> | -title <title> | -rtitle <regextitle>] ")
-		_T("[-width <w>|-height <h>] ")
-		_T("-pos <topleft | topcenter | topright | centerright | bottomright | bottomcenter | bottomleft | centerleft | center>"),
-		_T("madomanic"),
+		_T("madomanic [-e <executable>] [-E <executablefull>] [-title <title>] [-rtitle <regextitle>] ")
+		_T("[-width <max | half | 3rd | 4th | <AnyPixcels>] ")
+		_T("[-height <max | half | 3rd | 4th | <AnyPixcels>] ")
+		_T("[-pos <topleft | topcenter | topright | centerright | bottomright | bottomcenter | bottomleft | centerleft | center>] ")
+		_T("[-h]"),
+
+		APP_NAME _T(" ") APP_VERSION,
 		MB_ICONINFORMATION
 		);
 }
