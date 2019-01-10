@@ -1,8 +1,10 @@
 *.sdf
 *.suo
 *.user
+*.opensdf
+*~
 .vs/
 ipch/
-UnicodeDebug/
-UnicodeRelease/
+Debug/
+Release/
 
