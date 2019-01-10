@@ -13,7 +13,7 @@
 #include "helper.h"
 
 
-
+using namespace Ambiesoft;
 
 BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
 {
