@@ -49,24 +49,29 @@
 class CTopWinInfo
 {
 	HWND h_;
-	tstring path_;
+	DWORD pid_;
+	wstring path_;
 	UINT order_;
 public:
-	CTopWinInfo(HWND h, LPCTSTR path, UINT o)
+	CTopWinInfo(HWND h, LPCTSTR path, UINT o, DWORD pid)
 	{
 		h_=h;
 		path_=path;
 		order_=o;
+		pid_ = pid;
 	}
-	LPCTSTR GetPath() const {
-		return path_.c_str();
+	const wstring& GetPath() const {
+		return path_;
 	}
 	HWND GetHwnd() const {
 		return h_;
 	}
+	DWORD GetProcessID() const {
+		return pid_;
+	}
 };
 
-typedef vector<CTopWinInfo*> TOPWINVECTOR;
+typedef vector<std::shared_ptr<CTopWinInfo> > TOPWINVECTOR;
 enum MV_POS
 {
 	MV_POS_NONE = 0,
@@ -87,4 +92,4 @@ enum MV_POS
 
 
 
-BOOL maniWindow(HWND hwnd, MV_POS postype, MV_SIZE sizetype, int cw, int ch);
+BOOL maniWindow(HWND hwnd, MV_POS postype, MV_SIZE sizetype, int cw, int ch, bool bRestoreWindow, RECT& resultRect);

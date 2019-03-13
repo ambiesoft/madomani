@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "madomani", "madomani\madomani.vcxproj", "{CA7072A5-EC90-4BBD-98E0-AFD8B7D7B71C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1836DA44-4B03-4C04-9F18-5F9DF7B7AA68} = {1836DA44-4B03-4C04-9F18-5F9DF7B7AA68}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "madomanic", "madomanic\madomanic.vcxproj", "{1836DA44-4B03-4C04-9F18-5F9DF7B7AA68}"
 EndProject

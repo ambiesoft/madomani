@@ -28,7 +28,7 @@
 
 #include "madomanic.h"
 
-BOOL maniWindow(HWND hwnd, MV_POS postype, MV_SIZE sizetype, int cw, int ch)
+BOOL maniWindow(HWND hwnd, MV_POS postype, MV_SIZE sizetype, int cw, int ch, bool bRestoreWindow, RECT& resultRect)
 {
 	RECT rcWork;
 	if(!GetWorkingArea(hwnd, &rcWork))
@@ -175,7 +175,22 @@ BOOL maniWindow(HWND hwnd, MV_POS postype, MV_SIZE sizetype, int cw, int ch)
 		
 	}
 
+	// return value
+	resultRect.top = targetPos.y;
+	resultRect.left = targetPos.x;
+	resultRect.bottom = resultRect.top + targetHeight;
+	resultRect.right = resultRect.left + targetWidth;
 
+	if (bRestoreWindow)
+	{
+		if (IsIconic(hwnd) || IsZoomed(hwnd))
+			ShowWindow(hwnd, SW_RESTORE);
+	}
+	else
+	{
+		if (IsIconic(hwnd) || IsZoomed(hwnd))
+			return false;
+	}
 	return SetWindowPos(hwnd, 
 		NULL, 
 		targetPos.x, 

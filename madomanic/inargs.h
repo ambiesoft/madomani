@@ -31,8 +31,8 @@ class CINArgs
 	DWORD* sizetypeHeight_;
 	int sizeHeightCustom_;
 
-	tstring* mainarg_;
-	tstring* regtitle_;
+	// Input files
+	std::vector<pair<wstring,wstring> > mainargs_;
 
 	void argprocessWH(bool bWidth, int& i, const int argc, LPTSTR*& argv, LPCTSTR pError);
 
@@ -42,8 +42,6 @@ public:
 		postype_ = NULL;
 		sizetypeWidth_ = NULL;
 		sizetypeHeight_ = NULL;
-		mainarg_ = NULL;
-		regtitle_ = NULL;
 
 		sizeWidthCustom_ = 0;
 		sizeHeightCustom_ = 0;
@@ -53,8 +51,6 @@ public:
 		delete postype_;
 		delete sizetypeWidth_;
 		delete sizetypeHeight_;
-		delete mainarg_;
-		delete regtitle_;
 	}
 	int GetCustomWidth() const {
 		return sizeWidthCustom_;
@@ -89,29 +85,28 @@ public:
 	void argprocessWidth(int& i, const int argc, LPTSTR*& argv, LPCTSTR pError);
 	void argprocessHeight(int& i, const int argc, LPTSTR*& argv, LPCTSTR pError);
 	
-	bool HasRegTitle() const {
-		return regtitle_ != NULL;
+	bool HasRegTitle(size_t i) const {
+		return !mainargs_[i].first.empty();
 	}
-	tstring GetRegTitle() const {
-		if (!regtitle_)
-			return tstring();
-		return *regtitle_;
+	const wstring& GetRegTitle(size_t i) const {
+		return mainargs_[i].second;
 	}
-	void SetRegTitle(const tstring& t) {
-		DASSERT(!regtitle_);
-		regtitle_ = new tstring(t);
+	//void SetRegTitle(const tstring& t) {
+	//	DASSERT(!regtitle_);
+	//	regtitle_ = new tstring(t);
+	//}
+
+	bool HasMainArg(size_t i) const {
+		return !mainargs_[i].second.empty();
+	}
+	const wstring& GetMainArg(size_t i) const {
+		return mainargs_[i].second;
 	}
 
-	bool HasMainArg() const {
-		return mainarg_ != NULL;
+	size_t length() const {
+		return mainargs_.size();
 	}
-	tstring GetMainArg() const {
-		if (!mainarg_)
-			return tstring();
-		return *mainarg_;
-	}
-	void SetMainArg(const tstring& t) {
-		DASSERT(!mainarg_);
-		mainarg_ = new tstring(t);
+	void AddMainArg(const wstring& rtitle, const wstring& exe) {
+		mainargs_.push_back(pair<wstring, wstring>(rtitle, exe));
 	}
 };

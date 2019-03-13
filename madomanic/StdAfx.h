@@ -38,6 +38,9 @@
 
 #include <vector>
 #include <string>
+#include <map>
+#include <memory>
+
 using namespace std;
 
 #define countof(a) (sizeof(a)/sizeof(a[0]))
@@ -101,7 +104,7 @@ inline void DTRACE(LPCTSTR s) { OutputDebugString(s); }
 
 #define I18S(t) (t) 
 #define APP_NAME _T("madomani")
-#define APP_VERSION _T("1.0.1")
+#define APP_VERSION _T("1.0.2")
 
 #include "../../lsMisc/tstring.h"
 

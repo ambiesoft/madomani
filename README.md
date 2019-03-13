@@ -1,3 +1,8 @@
 # madomani
 
-Madomani manipulates the size and position of an existing window.
+Madomani changes size or position of windows.
+
+## CommandLine
+
+
+## License

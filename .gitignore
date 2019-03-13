@@ -3,6 +3,8 @@
 *.user
 *.opensdf
 *~
+*.bkmemo
+
 .vs/
 ipch/
 Debug/

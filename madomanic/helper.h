@@ -22,3 +22,4 @@
 //SUCH DAMAGE.
 
 void errorMeesageAndQuit(LPCTSTR pMessage, int returnvalue = -1);
+void showhelp();
