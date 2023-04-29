@@ -37,6 +37,7 @@
 #include "inargs.h"
 #include "helper.h"
 
+#pragma comment(lib, "Shlwapi.lib")
 
 using namespace Ambiesoft;
 using namespace Ambiesoft::stdosd;
