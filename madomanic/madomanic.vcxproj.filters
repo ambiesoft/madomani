@@ -1,84 +1,94 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{d8f27ed6-cfa8-46ba-91d1-05a30ce8ee3a}</UniqueIdentifier>
-      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
+    <Filter Include="1 Header Files">
       <UniqueIdentifier>{f291d117-f7c0-4eb1-9cc8-b07ec89ae6bf}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
+    <Filter Include="3 Resource Files">
       <UniqueIdentifier>{f34f8a29-801d-4a34-8e3f-1dce8a5813f1}</UniqueIdentifier>
       <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+    <Filter Include="2 Source Files">
+      <UniqueIdentifier>{d8f27ed6-cfa8-46ba-91d1-05a30ce8ee3a}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="4 Dists">
+      <UniqueIdentifier>{5161aff5-3505-4022-a1f2-86c021e8985d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="inargs.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>2 Source Files</Filter>
     </ClCompile>
     <ClCompile Include="madomanic.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>2 Source Files</Filter>
     </ClCompile>
     <ClCompile Include="maniWindow.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>2 Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StdAfx.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>2 Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\lsMisc\GetFileNameFromHwnd.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\lsMisc\getWindowTstring.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>2 Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\lsMisc\GetWorkingArea.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\lsMisc\stringEndwith.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>2 Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\lsMisc\vbregexp.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>2 Source Files</Filter>
     </ClCompile>
     <ClCompile Include="helper.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>2 Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\lsMisc\stdosd\stdosd.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>2 Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\lsMisc\stdosd\stdosd_win.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>2 Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lsMisc\GetWindowString.cpp">
+      <Filter>2 Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inargs.h">
-      <Filter>Header Files</Filter>
+      <Filter>1 Header Files</Filter>
     </ClInclude>
     <ClInclude Include="madomanic.h">
-      <Filter>Header Files</Filter>
+      <Filter>1 Header Files</Filter>
     </ClInclude>
     <ClInclude Include="StdAfx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\lsMisc\getWindowTstring.h">
-      <Filter>Header Files</Filter>
+      <Filter>1 Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\lsMisc\GetWorkingArea.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\lsMisc\stringEndwith.h">
-      <Filter>Header Files</Filter>
+      <Filter>1 Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\lsMisc\vbregexp.h">
-      <Filter>Header Files</Filter>
+      <Filter>1 Header Files</Filter>
     </ClInclude>
     <ClInclude Include="helper.h">
-      <Filter>Header Files</Filter>
+      <Filter>1 Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\lsMisc\stdosd\stdosd.h">
-      <Filter>Header Files</Filter>
+      <Filter>1 Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\lsMisc\GetWindowString.h">
+      <Filter>1 Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\History.txt">
+      <Filter>4 Dists</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Filter>4 Dists</Filter>
+    </None>
+    <None Include="..\README.md">
+      <Filter>4 Dists</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -32,7 +32,7 @@ class CINArgs
 	int sizeHeightCustom_;
 
 	// Input files
-	std::vector<pair<wstring,wstring> > mainargs_;
+	std::vector<tuple<wstring, wstring, wstring> > mainargs_;
 
 	void argprocessWH(bool bWidth, int& i, const int argc, LPTSTR*& argv, LPCTSTR pError);
 
@@ -81,32 +81,35 @@ public:
 		postype_ = new MV_POS;
 		*postype_ = pos;
 	}
-	
+
 	void argprocessWidth(int& i, const int argc, LPTSTR*& argv, LPCTSTR pError);
 	void argprocessHeight(int& i, const int argc, LPTSTR*& argv, LPCTSTR pError);
-	
+
 	bool HasRegTitle(size_t i) const {
-		return !mainargs_[i].first.empty();
+		return !std::get<0>(mainargs_[i]).empty();
 	}
 	const wstring& GetRegTitle(size_t i) const {
-		return mainargs_[i].second;
+		return std::get<0>(mainargs_[i]);
 	}
-	//void SetRegTitle(const tstring& t) {
-	//	DASSERT(!regtitle_);
-	//	regtitle_ = new tstring(t);
-	//}
 
-	bool HasMainArg(size_t i) const {
-		return !mainargs_[i].second.empty();
+	bool HasExe(size_t i) const {
+		return !std::get<1>(mainargs_[i]).empty();
 	}
-	const wstring& GetMainArg(size_t i) const {
-		return mainargs_[i].second;
+	const wstring& GetExe(size_t i) const {
+		return std::get<1>(mainargs_[i]);
+	}
+
+	bool HasClass(size_t i) const {
+		return !std::get<2>(mainargs_[i]).empty();
+	}
+	const wstring& GetClass(size_t i) const {
+		return std::get<2>(mainargs_[i]);
 	}
 
 	size_t length() const {
 		return mainargs_.size();
 	}
-	void AddMainArg(const wstring& rtitle, const wstring& exe) {
-		mainargs_.push_back(pair<wstring, wstring>(rtitle, exe));
+	void AddMainArg(const wstring& rtitle, const wstring& exe, const wstring& winclass) {
+		mainargs_.push_back(tuple<wstring, wstring, wstring>(rtitle, exe, winclass));
 	}
 };

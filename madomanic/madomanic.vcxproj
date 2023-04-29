@@ -122,20 +122,13 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\lsMisc\getWindowTstring.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="..\..\lsMisc\GetWindowString.cpp" />
     <ClCompile Include="..\..\lsMisc\GetWorkingArea.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\lsMisc\stdosd\stdosd.cpp" />
     <ClCompile Include="..\..\lsMisc\stdosd\stdosd_win.cpp" />
-    <ClCompile Include="..\..\lsMisc\stringEndwith.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="..\..\lsMisc\vbregexp.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
@@ -164,15 +157,21 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\lsMisc\getWindowTstring.h" />
+    <ClInclude Include="..\..\lsMisc\GetWindowString.h" />
     <ClInclude Include="..\..\lsMisc\GetWorkingArea.h" />
     <ClInclude Include="..\..\lsMisc\stdosd\stdosd.h" />
-    <ClInclude Include="..\..\lsMisc\stringEndwith.h" />
     <ClInclude Include="..\..\lsMisc\vbregexp.h" />
     <ClInclude Include="helper.h" />
     <ClInclude Include="inargs.h" />
     <ClInclude Include="madomanic.h" />
     <ClInclude Include="StdAfx.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\History.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\LICENSE" />
+    <None Include="..\README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

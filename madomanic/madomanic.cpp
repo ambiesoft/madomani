@@ -23,15 +23,7 @@
 
 #include "stdafx.h"
 
-#include <map>
 
-#include "../../lsMisc/GetFileNameFromHwnd.h"
-#include "../../lsMisc/tstring.h"
-#include "../../lsMisc/GetWorkingArea.h"
-#include "../../lsMisc/stringEndwith.h"
-#include "../../lsMisc/vbregexp.h"
-#include "../../lsMisc/getWindowTstring.h"
-#include "../../lsMisc/stdosd/stdosd.h"
 
 #include "madomanic.h"
 #include "inargs.h"
@@ -123,6 +115,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	// these are new
 	// -pos topleft -height max -width half -target="rtitle=,exe=AcroRd32.exe" -target="rtitle=,exe=FOXITREADER.EXE"
+	// -pos topright -height half -width 3rd -target="class=Chrome_WidgetWin_1"
 
 	if(__argc <= 1)
 	{
@@ -132,6 +125,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	bool bShowResult = false;
 	bool bRestoreWindow = false;
+	int maxMove = -1;
 	CINArgs inargs;
 	for(int i=1 ; i < __argc ; ++i)
 	{
@@ -186,7 +180,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 			}
 			else
 			{
-				tstring t= arg;
+				wstring t= arg;
 				t+= _T(" : ");
 				t+= I18S(_T("Invalid argument for -pos"));
 				errorMeesageAndQuit(t.c_str());
@@ -203,9 +197,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		else if(wcsncmp(arg, _T("-target="), 8)==0)
 		{
 			// Example:
-			// -target="rtitle=,exe=AcroRd32.exe"
+			// -target="rtitle=,class=Chrome_WidgetWin_1,exe=AcroRd32.exe"
 			wstring lookee = arg + 8;
-			
 
 			// split with ','
 			vector<wstring> parts = splitWithComma(lookee);
@@ -216,49 +209,36 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 				nameandvalues.insert(nameandvalue);
 			}
 
-			wstring rtitle, exe;
+			wstring rtitle, exe, winclass;
 			if (nameandvalues.find(L"rtitle") != nameandvalues.end())
 				rtitle = nameandvalues[L"rtitle"];
 			if (nameandvalues.find(L"exe") != nameandvalues.end())
 				exe = nameandvalues[L"exe"];
+			if (nameandvalues.find(L"class") != nameandvalues.end())
+				winclass = nameandvalues[L"class"];
 
-			if (rtitle.empty() && exe.empty())
+			if (rtitle.empty() && exe.empty() && winclass.empty())
 			{
 				// both empty
-				wstring message = I18S(L"'rtitle' or 'exe' must be specified.");
+				wstring message = I18S(L"'rtitle', 'exe' or 'class' must be specified.");
 				errorMeesageAndQuit(message.c_str());
 			}
 
-			//if (inargs.HasRegTitle())
-			//{
-			//	LPTSTR pMessage = (LPTSTR)malloc((lstrlen(inargs.GetMainArg().c_str()) + 128)*sizeof(TCHAR));
-			//	wsprintf(pMessage, I18S(_T("rtitle \"%s\" already set.")), inargs.GetRegTitle().c_str());
-			//	errorMeesageAndQuit(pMessage);
-			//}
-			//if( (i+1)==__argc )
-			//{
-			//	errorMeesageAndQuit(I18S(_T("No argument for -rtitle")));
-			//}
-			//++i;
-			//arg = targv[i];
-			inargs.AddMainArg(rtitle,exe);
+			inargs.AddMainArg(rtitle, exe, winclass);
 		}
-		//else if(lstrcmp(arg, _T("-e"))==0)
-		//{
-		//	if(inargs.HasMainArg())
-		//	{
-		//		LPTSTR pMessage = (LPTSTR)malloc( (lstrlen(inargs.GetMainArg().c_str()) + 128)*sizeof(TCHAR));
-		//		wsprintf(pMessage, I18S(_T("Main arg \"%s\" already set.")), inargs.GetMainArg().c_str());
-		//		errorMeesageAndQuit(pMessage);
-		//	}
-		//	if ((i + 1) == __argc)
-		//	{
-		//		errorMeesageAndQuit(I18S(_T("No argument for -e")));
-		//	}
-		//	++i;
-		//	inargs.SetMainArg(targv[i]);
-		//}
-		else if (lstrcmp(arg, _T("-h")) == 0 || lstrcmp(arg, _T("/?")) == 0)
+		else if (stdStartWith(arg, _T("-max=")))
+		{ 
+			wstring lookee = arg + 5;
+			if (!stdIsAsciiDigit(lookee))
+				errorMeesageAndQuit(I18S(L"Arugment for -max are not digits."));
+			maxMove = _ttoi(lookee.c_str());
+		}
+		else if (
+			lstrcmp(arg, _T("-h")) == 0 ||
+			lstrcmp(arg, _T("/?")) == 0 ||
+			lstrcmp(arg, _T("--help")) == 0 ||
+			lstrcmp(arg, _T("-v")) == 0 ||
+			lstrcmp(arg, _T("--version")) == 0 )
 		{
 			showhelp();
 			return 0;
@@ -273,7 +253,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		}
 		else
 		{
-			tstring message = I18S(_T("Unknown option:"));
+			wstring message = I18S(_T("Unknown option:"));
 			message += arg;
 			errorMeesageAndQuit(message.c_str());
 		}
@@ -287,42 +267,57 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	EnumWindows(EnumWindowsProc, (LPARAM)&allwins);
 
 	wstring processResults;
+	int moveCount = 0;
+	bool breaking = false;
 	for (auto&& win : allwins)
 	{
+		if (breaking)
+			break;
 		for (size_t i = 0; i < inargs.length(); ++i)
 		{
 			// No exe == true 
 			// OR
 			// exe matches
-			if (!inargs.HasMainArg(i) ||
-				stringEndwithI(
-				win->GetPath().c_str(),
-				inargs.GetMainArg(i).c_str())
+			if (!inargs.HasExe(i) ||
+				stdEndWith(
+				stdStringUpper( win->GetPath()),
+				stdStringUpper(inargs.GetExe(i)))
 				)
 			{
 				// No reg
 				// OR
 				// title matches reg
 				if (!inargs.HasRegTitle(i) ||
-					(vbregMatch(getWindowTstring(win->GetHwnd()).c_str(), inargs.GetRegTitle(i).c_str())))
+					(vbregMatch(getWindowTitle(win->GetHwnd()).c_str(), inargs.GetRegTitle(i).c_str())))
 				{
-					RECT resultRect = { 0 };
-					BOOL success = maniWindow(
-						win->GetHwnd(),
-						inargs.GetPostType(),
-						inargs.GetSizeTypeWidth() | inargs.GetSizeTypeHeight(),
-						inargs.GetCustomWidth(), inargs.GetCustomHeight(),
-						bRestoreWindow,
-						resultRect);
-
-					if (bShowResult)
+					if (!inargs.HasClass(i) ||
+						getWindowClassName(win->GetHwnd())==inargs.GetClass(i))
 					{
-						processResults += stdFormat(L"%s '%s' (Process=%d, HWND=%#p) has moved to (%d,%d,%d,%d)\r\n",
-							(success ? I18S(L"Succeeded") : I18S(L"Failed")),
-							win->GetPath().c_str(),
-							win->GetProcessID(),
+						RECT resultRect = { 0 };
+						BOOL success = maniWindow(
 							win->GetHwnd(),
-							resultRect.left, resultRect.top, resultRect.right, resultRect.bottom);
+							inargs.GetPostType(),
+							inargs.GetSizeTypeWidth() | inargs.GetSizeTypeHeight(),
+							inargs.GetCustomWidth(), inargs.GetCustomHeight(),
+							bRestoreWindow,
+							resultRect);
+
+						if (bShowResult)
+						{
+							processResults += stdFormat(L"%s '%s' (Process=%d, HWND=%#p) has moved to (%d,%d,%d,%d)\r\n",
+								(success ? I18S(L"Succeeded") : I18S(L"Failed")),
+								win->GetPath().c_str(),
+								win->GetProcessID(),
+								win->GetHwnd(),
+								resultRect.left, resultRect.top, resultRect.right, resultRect.bottom);
+						}
+						
+						moveCount++;
+						if (maxMove >= 0 && moveCount >= maxMove)
+						{
+							breaking = true;
+							break;
+						}
 					}
 				}
 			}

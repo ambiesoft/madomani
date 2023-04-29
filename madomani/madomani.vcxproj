@@ -80,9 +80,8 @@
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent>
-      <Command>C:\LegacyPrograms\FFC\FFC.exe /t12 "$(SolutionDir)README.md" "$(SolutionDir)History.txt" "$(SolutionDir)LICENSE" /to:"$(TargetDir)"
-
-</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -109,9 +108,8 @@
       <SubSystem>Windows</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>C:\LegacyPrograms\FFC\FFC.exe /t12 "$(SolutionDir)README.md" "$(SolutionDir)History.txt" "$(SolutionDir)LICENSE" /to:"$(TargetDir)"
-
-</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

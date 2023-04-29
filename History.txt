@@ -1,3 +1,6 @@
+2019/03/13 ver2.0.1
+Add many
+
 2019/03/13 ver1.0.2
 Can specify multiple windows now
 

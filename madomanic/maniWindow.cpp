@@ -23,7 +23,6 @@
 
 #include "stdafx.h"
 
-#include "../../lsMisc/tstring.h"
 #include "../../lsMisc/GetWorkingArea.h"
 
 #include "madomanic.h"

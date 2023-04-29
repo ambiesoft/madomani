@@ -32,17 +32,17 @@ void errorMeesageAndQuit(LPCTSTR pMessage, int returnvalue)
 
 void showhelp()
 {
-
 	MessageBox(NULL,
 		L"madomanic : Move windows to specified positon\r\n\r\n"
 		_T("Usage:\n")
-		LR"(madomanic -target="rtitle=<regex>,exe=<executable>" [-target=...]...)" L"\r\n"
+		LR"(madomanic -target="rtitle=<regex>,exe=<executable>,class=<classname>" [-target=...]...)" L"\r\n"
 		_T("[-width <max | half | 3rd | 4th | <AnyPixcels>] \r\n")
 		_T("[-height <max | half | 3rd | 4th | <AnyPixcels>] \r\n")
 		_T("[-pos <topleft | topcenter | topright | centerright | bottomright | bottomcenter | bottomleft | centerleft | center>] \r\n")
+		_T("[-max MAXCOUNT_TO_MOVE \r\n")
 		_T("[-h] [-g] [-r] \r\n\r\n")
 
-		L"Specify a window by regex and executable, regex is used to filter windows by its tilte and executable by its path.\t\n"
+		L"Specify a window by regex title, executable or classname.\t\n"
 		L"'-g' restores the window if it is iconized or zoomed.\r\n"
 		L"'-r' show the result of the operation.\r\n"
 		L"\r\n"

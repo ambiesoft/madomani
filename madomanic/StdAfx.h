@@ -40,6 +40,13 @@
 #include <string>
 #include <map>
 #include <memory>
+#include <map>
+
+#include "../../lsMisc/GetFileNameFromHwnd.h"
+#include "../../lsMisc/GetWorkingArea.h"
+#include "../../lsMisc/vbregexp.h"
+#include "../../lsMisc/getWindowString.h"
+#include "../../lsMisc/stdosd/stdosd.h"
 
 using namespace std;
 
@@ -104,9 +111,7 @@ inline void DTRACE(LPCTSTR s) { OutputDebugString(s); }
 
 #define I18S(t) (t) 
 #define APP_NAME _T("madomani")
-#define APP_VERSION _T("1.0.2")
-
-#include "../../lsMisc/tstring.h"
+#define APP_VERSION _T("2.0.1")
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++

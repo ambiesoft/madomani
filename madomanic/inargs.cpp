@@ -26,7 +26,7 @@
 #include "inargs.h"
 #include "helper.h"
 
-bool isStringDigit(const tstring& str)
+bool isStringDigit(const wstring& str)
 {
 	for (TCHAR t : str)
 	{
@@ -45,7 +45,7 @@ void CINArgs::argprocessWidth(int& i, const int argc, LPTSTR*& argv, LPCTSTR pEr
 }
 void CINArgs::argprocessWH(bool bWidth, int& i, const int argc, LPTSTR*& argv, LPCTSTR pError)
 {
-	tstring message;
+	wstring message;
 	DWORD*& target = bWidth ? sizetypeWidth_ : sizetypeHeight_;
 	int& customtarget = bWidth ? sizeWidthCustom_ : sizeHeightCustom_;
 	if (target != NULL)
@@ -92,7 +92,7 @@ void CINArgs::argprocessWH(bool bWidth, int& i, const int argc, LPTSTR*& argv, L
 		}
 		else
 		{
-			tstring t = arg;
+			wstring t = arg;
 			t += _T(" : ");
 			t += I18S(_T("Invalid argument for "));
 			t += pError;
