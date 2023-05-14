@@ -46,6 +46,41 @@ public:
 		sizeWidthCustom_ = 0;
 		sizeHeightCustom_ = 0;
 	}
+	CINArgs(const CINArgs& that) {
+		if (that.postype_) 
+		{
+			this->postype_ = new MV_POS;
+			*this->postype_ = *that.postype_;
+		}
+		else {
+			this->postype_ = NULL;
+		}
+
+		if (that.sizetypeWidth_)
+		{
+			this->sizetypeWidth_ = new DWORD;
+			*this->sizetypeWidth_ = *that.sizetypeWidth_;
+		}
+		else
+		{
+			this->sizetypeWidth_ = NULL;
+		}
+
+		if (that.sizetypeHeight_)
+		{
+			this->sizetypeHeight_ = new DWORD;
+			*this->sizetypeHeight_ = *that.sizetypeHeight_;
+		}
+		else
+		{
+			this->sizetypeHeight_ = NULL;
+		}
+
+		this->sizeWidthCustom_ = that.sizeWidthCustom_;
+		this->sizeHeightCustom_ = that.sizeHeightCustom_;
+
+		this->mainargs_ = that.mainargs_;
+	}
 	~CINArgs()
 	{
 		delete postype_;

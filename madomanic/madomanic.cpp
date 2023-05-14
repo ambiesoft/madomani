@@ -97,7 +97,43 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
 }
 
 
+bool isOption(LPCWSTR arg, LPCWSTR pOption, int* pN)
+{
+	if (!stdStartWith(arg, pOption))
+		return false;
 
+	LPCWSTR pNum = arg + stdStringLength(pOption);
+	if (!*pNum || stdIsSpace(*pNum))
+	{
+		*pN = 0;
+		return true;
+	}
+
+	if (!stdIsAsciiDigit(*pNum))
+	{
+		errorMeesageAndQuit(stdFormat(L"Illegal option '%s'", arg).c_str());
+	}
+	*pN = _wtoi(pNum);
+	return true;
+}
+
+
+vector<CINArgs> getInargsAsVector(map<int, CINArgs>& inargses)
+{
+	vector<CINArgs> ret;
+	for (int i = 0; ; ++i)
+	{
+		if (inargses.size() == 0)
+			return ret;
+
+		if (inargses.count(i))
+		{
+			ret.push_back(inargses[i]);
+			inargses.erase(i);
+		}
+	}
+	return ret;
+}
 
 
 int APIENTRY _tWinMain(HINSTANCE hInstance,
@@ -114,8 +150,10 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	// -pos topleft mdie.exe -rtitle "^MDIE"
 
 	// these are new
-	// -pos topleft -height max -width half -target="rtitle=,exe=AcroRd32.exe" -target="rtitle=,exe=FOXITREADER.EXE"
-	// -pos topright -height half -width 3rd -target="class=Chrome_WidgetWin_1"
+	// -pos topleft -height max -width half -target "rtitle=,exe=AcroRd32.exe" -target="rtitle=,exe=FOXITREADER.EXE"
+	// -pos topright -height half -width 3rd -target "class=Chrome_WidgetWin_1"
+	// -pos1 topright -height1 half -width1 3rd -target1 "class=Chrome_WidgetWin_1"
+	// -pos1 topright -height1 half -width1 3rd -target1 "class=Chrome_WidgetWin_1" -pos2 bottomright -height2 half -width2 3rd -target2 "class=Chrome_WidgetWin_1"
 
 	if(__argc <= 1)
 	{
@@ -126,13 +164,14 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	bool bShowResult = false;
 	bool bRestoreWindow = false;
 	int maxMove = -1;
-	CINArgs inargs;
+	int n;
+	map<int, CINArgs> inargses;
 	for(int i=1 ; i < __argc ; ++i)
 	{
 		LPCTSTR arg = targv[i];
-		if(lstrcmp(arg, _T("-pos"))==0)
+		if(isOption(arg, L"-pos", &n))
 		{
-			if(inargs.HasPostype())
+			if(inargses[n].HasPostype())
 			{
 				errorMeesageAndQuit(I18S(_T("-pos : pos already set")));
 			}
@@ -144,39 +183,39 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 			arg = targv[i];
 			if(lstrcmp(arg, _T("topleft"))==0)
 			{
-				inargs.SetPostype(MV_POS_TOPLEFT);
+				inargses[n].SetPostype(MV_POS_TOPLEFT);
 			}
 			else if(lstrcmp(arg, _T("topcenter"))==0)
 			{
-				inargs.SetPostype(MV_POS_TOPCENTER);
+				inargses[n].SetPostype(MV_POS_TOPCENTER);
 			}
 			else if(lstrcmp(arg, _T("topright"))==0)
 			{
-				inargs.SetPostype(MV_POS_TOPRIGHT);
+				inargses[n].SetPostype(MV_POS_TOPRIGHT);
 			}
 			else if(lstrcmp(arg, _T("centerright"))==0)
 			{
-				inargs.SetPostype(MV_POS_CENTERRIGHT);
+				inargses[n].SetPostype(MV_POS_CENTERRIGHT);
 			}
 			else if(lstrcmp(arg, _T("bottomright"))==0)
 			{
-				inargs.SetPostype(MV_POS_BOTTOMRIGHT);
+				inargses[n].SetPostype(MV_POS_BOTTOMRIGHT);
 			}
 			else if(lstrcmp(arg, _T("bottomcenter"))==0)
 			{
-				inargs.SetPostype(MV_POS_BOTTOMCENTER);
+				inargses[n].SetPostype(MV_POS_BOTTOMCENTER);
 			}
 			else if(lstrcmp(arg, _T("bottomleft"))==0)
 			{
-				inargs.SetPostype(MV_POS_BOTTOMLEFT);
+				inargses[n].SetPostype(MV_POS_BOTTOMLEFT);
 			}
 			else if(lstrcmp(arg, _T("centerleft"))==0)
 			{
-				inargs.SetPostype(MV_POS_CENTERLEFT);
+				inargses[n].SetPostype(MV_POS_CENTERLEFT);
 			}
 			else if(lstrcmp(arg, _T("center"))==0)
 			{
-				inargs.SetPostype(MV_POS_CENTER);
+				inargses[n].SetPostype(MV_POS_CENTER);
 			}
 			else
 			{
@@ -186,19 +225,25 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 				errorMeesageAndQuit(t.c_str());
 			}
 		}
-		else if(lstrcmp(arg, _T("-width"))==0)
+		else if(isOption(arg, _T("-width"), &n))
 		{
-			inargs.argprocessWidth(i, __argc, targv, arg);
+			inargses[n].argprocessWidth(i, __argc, targv, arg);
 		}
-		else if(lstrcmp(arg, _T("-height"))==0)
+		else if(isOption(arg, _T("-height"),&n))
 		{
-			inargs.argprocessHeight(i, __argc, targv, arg);
+			inargses[n].argprocessHeight(i, __argc, targv, arg);
 		}
-		else if(wcsncmp(arg, _T("-target="), 8)==0)
+		else if(isOption(arg, _T("-target"), &n))
 		{
 			// Example:
-			// -target="rtitle=,class=Chrome_WidgetWin_1,exe=AcroRd32.exe"
-			wstring lookee = arg + 8;
+			// -target "rtitle=,class=Chrome_WidgetWin_1,exe=AcroRd32.exe"
+			if ((i + 1) == __argc)
+			{
+				errorMeesageAndQuit(I18S(_T("No argument for -pos")));
+			}
+			++i;
+			arg = targv[i];
+			wstring lookee = arg;
 
 			// split with ','
 			vector<wstring> parts = splitWithComma(lookee);
@@ -224,12 +269,18 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 				errorMeesageAndQuit(message.c_str());
 			}
 
-			inargs.AddMainArg(rtitle, exe, winclass);
+			inargses[n].AddMainArg(rtitle, exe, winclass);
 		}
-		else if (stdStartWith(arg, _T("-max=")))
+		else if (isOption(arg, _T("-max"), &n))
 		{ 
-			wstring lookee = arg + 5;
-			if (!stdIsAsciiDigit(lookee))
+			if ((i + 1) == __argc)
+			{
+				errorMeesageAndQuit(I18S(_T("No argument for -pos")));
+			}
+			++i;
+			arg = targv[i];
+			wstring lookee = arg;
+			if (!stdIsAsciiDigitString(lookee))
 				errorMeesageAndQuit(I18S(L"Arugment for -max are not digits."));
 			maxMove = _ttoi(lookee.c_str());
 		}
@@ -259,64 +310,88 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		}
 	}
 
-	if (!inargs.HasPostype() && ( 0 == (inargs.GetSizeTypeWidth() | inargs.GetSizeTypeHeight())))
+	for (auto&& inA : inargses)
 	{
-		errorMeesageAndQuit(I18S(_T("No position specified.")));
+		if (!inargses[inA.first].HasPostype() && 
+			(0 == (inargses[inA.first].GetSizeTypeWidth() | inargses[inA.first].GetSizeTypeHeight())))
+		{
+			errorMeesageAndQuit(I18S(_T("No position specified.")));
+		}
 	}
+
 	TOPWINVECTOR allwins;
 	EnumWindows(EnumWindowsProc, (LPARAM)&allwins);
+
+	vector<CINArgs> vInArgs = getInargsAsVector(inargses);
+	set<vector<CINArgs>::iterator> processedVInargs;
 
 	wstring processResults;
 	int moveCount = 0;
 	bool breaking = false;
+	const bool oneByone = vInArgs.size() > 1;
 	for (auto&& win : allwins)
 	{
+		bool oneByoneNow = false;
 		if (breaking)
 			break;
-		for (size_t i = 0; i < inargs.length(); ++i)
+		for (vector<CINArgs>::iterator vIt = vInArgs.begin() ; vIt != vInArgs.end(); ++vIt)
 		{
-			// No exe == true 
-			// OR
-			// exe matches
-			if (!inargs.HasExe(i) ||
-				stdEndWith(
-				stdStringUpper( win->GetPath()),
-				stdStringUpper(inargs.GetExe(i)))
-				)
-			{
-				// No reg
-				// OR
-				// title matches reg
-				if (!inargs.HasRegTitle(i) ||
-					(vbregMatch(getWindowTitle(win->GetHwnd()).c_str(), inargs.GetRegTitle(i).c_str())))
-				{
-					if (!inargs.HasClass(i) ||
-						getWindowClassName(win->GetHwnd())==inargs.GetClass(i))
-					{
-						RECT resultRect = { 0 };
-						BOOL success = maniWindow(
-							win->GetHwnd(),
-							inargs.GetPostType(),
-							inargs.GetSizeTypeWidth() | inargs.GetSizeTypeHeight(),
-							inargs.GetCustomWidth(), inargs.GetCustomHeight(),
-							bRestoreWindow,
-							resultRect);
+			if (breaking || oneByoneNow)
+				break;
 
-						if (bShowResult)
+			for (size_t i = 0; i < vIt->length(); ++i)
+			{
+				if (processedVInargs.find(vIt) != processedVInargs.end())
+					continue;
+				// No exe == true 
+				// OR
+				// exe matches
+				if (!vIt->HasExe(i) ||
+					stdEndWith(
+						stdStringUpper(win->GetPath()),
+						stdStringUpper(vIt->GetExe(i)))
+					)
+				{
+					// No reg
+					// OR
+					// title matches reg
+					if (!vIt->HasRegTitle(i) ||
+						(vbregMatch(getWindowTitle(win->GetHwnd()).c_str(), vIt->GetRegTitle(i).c_str())))
+					{
+						if (!vIt->HasClass(i) ||
+							getWindowClassName(win->GetHwnd()) == vIt->GetClass(i))
 						{
-							processResults += stdFormat(L"%s '%s' (Process=%d, HWND=%#p) has moved to (%d,%d,%d,%d)\r\n",
-								(success ? I18S(L"Succeeded") : I18S(L"Failed")),
-								win->GetPath().c_str(),
-								win->GetProcessID(),
+							RECT resultRect = { 0 };
+							BOOL success = maniWindow(
 								win->GetHwnd(),
-								resultRect.left, resultRect.top, resultRect.right, resultRect.bottom);
-						}
-						
-						moveCount++;
-						if (maxMove >= 0 && moveCount >= maxMove)
-						{
-							breaking = true;
-							break;
+								vIt->GetPostType(),
+								vIt->GetSizeTypeWidth() | vIt->GetSizeTypeHeight(),
+								vIt->GetCustomWidth(), vIt->GetCustomHeight(),
+								bRestoreWindow,
+								resultRect);
+
+							if (bShowResult)
+							{
+								processResults += stdFormat(L"%s '%s' (Process=%d, HWND=%#p) has moved to (%d,%d,%d,%d)\r\n",
+									(success ? I18S(L"Succeeded") : I18S(L"Failed")),
+									win->GetPath().c_str(),
+									win->GetProcessID(),
+									win->GetHwnd(),
+									resultRect.left, resultRect.top, resultRect.right, resultRect.bottom);
+							}
+
+							moveCount++;
+							if (maxMove >= 0 && moveCount >= maxMove)
+							{
+								breaking = true;
+								break;
+							}
+							if (oneByone)
+							{
+								oneByoneNow = true;
+								processedVInargs.insert(vIt);
+								break;
+							}
 						}
 					}
 				}
